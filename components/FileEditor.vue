@@ -1,11 +1,11 @@
 <template>
   <div>
-    <CodeEditor :content="content" :tab="tab" />
+    <CodeEditor :tab="tab" />
   </div>
 </template>
 
 <script setup>
-const props = defineProps(["content", "tab"]);
+const props = defineProps(["tab"]);
 </script>
 
 <style>

@@ -87,6 +87,14 @@
             />
           </ClientOnly>
         </Suspense>
+
+        <div
+          v-show="!currentTab"
+          class="no-tab-pane"
+          :style="{ height: `calc(100% - ${tabHeight}px)` }"
+        >
+          <div class="center-wrapper">请从左侧打开一个文件</div>
+        </div>
       </div>
     </div>
   </section>
@@ -99,12 +107,13 @@ const config = useRuntimeConfig();
 const { $toast } = useNuxtApp();
 const monaco = useMonaco();
 // const colorMode = useColorMode();
+const tabHeight = ref(48);
 let monacoEditor = null;
 const loading = ref(false);
 const showEditor = ref(true);
 const tabRef = ref(null);
 const monacoRef = ref(null);
-const props = defineProps(["id", "lang", "content", "tab"]);
+const props = defineProps(["id", "lang", "tab"]);
 const editorTheme = ref("");
 const currentTab = ref("");
 const tabs = ref([]);
@@ -148,6 +157,11 @@ onBeforeMount(() => {
   loading.value = true;
 });
 
+onUnmounted(() => {
+  monacoEditor && monacoEditor.dispose();
+  monacoEditor = null;
+});
+
 watch(
   () => props.tab,
   (tab) => {
@@ -161,7 +175,6 @@ watch(
     } else {
       if (tab.isDoubleClick) {
         currentTab.value = tab.currentTab;
-
         tabRef.value?.addTab({
           label: tab.label,
           key: tab.key,

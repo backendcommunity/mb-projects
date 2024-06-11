@@ -54,42 +54,51 @@
         </div>
       </div>
 
-      <Splitpanes
-        class="bg-[#191919]"
-        :push-other-panes="false"
-        style="height: 100%"
-      >
-        <pane
-          class="border-b border-gray-800 h-full"
-          size="20"
+      <section class="h-full flex">
+        <div
+          ref="wrapper"
+          :class="`h-full  !bg-[#191919] ${false ? ' full-screen' : ''}`"
+        >
+          <Menu />
+        </div>
+        <Splitpanes
+          class="bg-[#191919]"
+          :push-other-panes="false"
           style="height: 100%"
         >
-          <FileExplorer @onContent="setContent" @onTab="setTab" />
-        </pane>
+          <pane class="border-b border-gray-800 min-h-full h-full" size="20">
+            <FileExplorer @onTab="setTab" />
+          </pane>
 
-        <pane class="h-full">
-          <splitpanes vertical style="height: 100%">
-            <pane class="border border-gray-800" size="100">
-              <splitpanes horizontal style="height: 100%">
-                <pane v-if="showEditor" size="70">
-                  <FileEditor :tab="tab" :content="content" />
-                </pane>
+          <pane class="h-full">
+            <splitpanes vertical style="height: 100%">
+              <pane class="border border-gray-800" size="100">
+                <splitpanes horizontal style="height: 100%">
+                  <pane v-if="showEditor" size="70">
+                    <FileEditor :tab="tab" />
+                  </pane>
 
-                <pane
-                  v-if="showTerminal"
-                  class="border-t border-gray-800"
-                  size="30"
-                >
-                  <Terminal />
-                </pane>
-              </splitpanes>
-            </pane>
-            <pane v-if="showBrowser" class="border-y border-gray-800" size="35">
-              <BrowserView />
-            </pane>
-          </splitpanes>
-        </pane>
-      </Splitpanes>
+                  <pane
+                    v-if="showTerminal"
+                    class="border-t border-gray-800"
+                    size="30"
+                  >
+                    <Terminal />
+                  </pane>
+                </splitpanes>
+              </pane>
+              <pane
+                v-if="showBrowser"
+                class="border-y border-gray-800"
+                size="35"
+              >
+                <BrowserView />
+              </pane>
+            </splitpanes>
+          </pane>
+        </Splitpanes>
+      </section>
+
       <div class="bg-[#191919]">
         <div class="flex w-full justify-end text-gray-400 px-4 gap- text-sm">
           <button
@@ -123,12 +132,8 @@
 const showBrowser = ref(false);
 const showTerminal = ref(true);
 const showEditor = ref(true);
-const content = ref("");
 const tab = ref("");
-
-function setContent(newContent) {
-  content.value = newContent;
-}
+const processing = ref(false);
 function setTab(newTab) {
   tab.value = newTab;
 }

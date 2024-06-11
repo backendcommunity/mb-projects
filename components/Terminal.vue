@@ -46,7 +46,10 @@
         </button>
       </div>
     </div>
-    <div class="terminal__wrapper" ref="terminalRef">
+    <div
+      class="terminal__wrapper h-full w-full bg-[#191919] pl-7 pt-3"
+      ref="terminalRef"
+    >
       <div
         class="w-full terminal"
         id="terminal-container"
@@ -72,7 +75,7 @@ const terminalEl = ref();
 const validCommmands = ["ls", "cat", "whoami", "clear", "ping"];
 
 const promptValue = `${
-  ITerminalColor.Cyan + "Solomon" + ITerminalColor.Purple
+  ITerminalColor.Cyan + "solomon" + ITerminalColor.Purple
 }@masteringbackend${ITerminalColor.Reset} $ `;
 
 function prompt() {
@@ -81,8 +84,8 @@ function prompt() {
 
 function init() {
   terminal.value = new Terminal({
-    // fontFamily: "Consolas",
-    fontWeight: "100",
+    fontFamily: "Ubuntu Mono, Terminus Font, courier-new, courier, monospace",
+    // fontWeight: "100",
     fontSize: 14,
     cursorBlink: true,
     cursorStyle: "bar",
@@ -94,21 +97,6 @@ function init() {
 
   terminal.value.open(document.getElementById("terminal-container"));
   fitAddon.fit();
-
-  terminal.value.writeln(
-    "Welcome to " +
-      ITerminalColor.Green +
-      "Masteringbackend playground" +
-      ITerminalColor.Reset +
-      ". This is " +
-      ITerminalColor.Red +
-      "experimental" +
-      ITerminalColor.Reset +
-      "."
-  );
-  terminal.value.writeln(
-    "Type commands ping, ls, cat, clear, etc. to play around.\n"
-  );
 
   prompt();
 
@@ -170,14 +158,6 @@ onMounted(() => {
 </script>
 
 <style>
-.terminal__wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  padding-right: 0;
-  background: #191919;
-}
-
 .terminal {
   width: 100%;
   height: 100%;
