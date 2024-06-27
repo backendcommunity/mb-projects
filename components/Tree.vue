@@ -76,105 +76,100 @@
 </template>
 
 
-<script>
-import NiceMonacoTree from "nice-monaco-tree"; // Fork this and add all icons under getFileIconLabel => file-utils.js
+<script setup>
+const { $NiceMonacoTree } = useNuxtApp(); // Fork this and add all icons under getFileIconLabel => file-utils.js
 
 let monacoTree = null;
 
-export default {
-  props: {
-    files: {
-      type: Array,
-      default: () => [
-        "package.json",
-        "README.md",
-        "index.js",
-        "src/test.js",
-        "src/index.js",
-        "public/index.html",
-        "tests/tt.rs",
-      ],
-    },
+const emit = defineEmits(["onTab"]);
 
-    defaultOpenFiles: {
-      type: Array,
-      default: () => ["README.md"],
-    },
-    readonly: {
-      type: Boolean,
-      default: true,
-    },
-    getFileContent: {
-      type: Function,
-      default: (filePath) => {
-        return [`${filePath}-left`, `${filePath}-right`];
-      },
-    },
-    getFileTitle: {
-      type: Function,
-      default: (filePath) => filePath.split("/").pop(),
-    },
-    monacoConfig: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  data() {
-    return {
-      currentTab: "",
-    };
+const props = defineProps({
+  files: {
+    type: Array,
+    default: () => [
+      "package.json",
+      "README.md",
+      "index.js",
+      "src/test.js",
+      "src/index.js",
+      "public/index.html",
+      "tests/tt.rs",
+    ],
   },
 
-  watch: {
-    currentTab(val) {
-      if (val) {
-        this.openFile(val);
-        monacoTree.setSelection(val);
-      }
+  defaultOpenFiles: {
+    type: Array,
+    default: () => ["README.md"],
+  },
+  readonly: {
+    type: Boolean,
+    default: true,
+  },
+  getFileContent: {
+    type: Function,
+    default: (filePath) => {
+      return [`${filePath}-left`, `${filePath}-right`];
     },
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initMonacoTree();
-    });
+  getFileTitle: {
+    type: Function,
+    default: (filePath) => filePath.split("/").pop(),
   },
-
-  methods: {
-    initMonacoTree() {
-      monacoTree = NiceMonacoTree.init(this.$refs.menu, {
-        files: this.files,
-        onClick: (filePath, file, fileIcon) => {
-          this.openFile(filePath, file, fileIcon, true);
-        },
-        onDoubleClick: (filePath, file, fileIcon) => {
-          this.openFile(filePath, file, fileIcon, true);
-        },
-      });
-      monacoTree.expandAll();
-      setTimeout(() => {
-        if (this.defaultOpenFiles && this.defaultOpenFiles[0]) {
-          monacoTree.setSelection(this.defaultOpenFiles[0]);
-        }
-      });
-    },
-
-    setSelection(filePath) {
-      monacoTree && monacoTree.setSelection(filePath);
-    },
-
-    openFile(filePath, file, fileIcon, isDoubleClick = true) {
-      this.$emit("onTab", {
-        label: this.getFileTitle(filePath),
-        key: filePath,
-        closable: true,
-        favicon: (h) => h("span"),
-        class: `monaco-icon-label ${fileIcon}`,
-        currentTab: filePath,
-        isDoubleClick: isDoubleClick,
-      });
-    },
+  monacoConfig: {
+    type: Object,
+    default: () => ({}),
   },
-};
+});
+
+const currentTab = ref("");
+const menu = ref(null);
+
+watch(
+  () => currentTab.value,
+  (val) => {
+    if (val) {
+      openFile(val);
+      monacoTree.setSelection(val);
+    }
+  }
+);
+onMounted(() => {
+  initMonacoTree();
+});
+
+function initMonacoTree() {
+  monacoTree = $NiceMonacoTree.init(menu.value, {
+    files: props.files,
+    onClick: (filePath, file, fileIcon) => {
+      openFile(filePath, file, fileIcon, true);
+    },
+    onDoubleClick: (filePath, file, fileIcon) => {
+      openFile(filePath, file, fileIcon, true);
+    },
+  });
+  monacoTree.expandAll();
+  setTimeout(() => {
+    if (props.defaultOpenFiles && props.defaultOpenFiles[0]) {
+      monacoTree.setSelection(props.defaultOpenFiles[0]);
+    }
+  });
+}
+
+function setSelection(filePath) {
+  monacoTree && monacoTree.setSelection(filePath);
+}
+
+function openFile(filePath, file, fileIcon, isDoubleClick = true) {
+  emit("onTab", {
+    label: props.getFileTitle(filePath),
+    key: filePath,
+    closable: true,
+    favicon: (h) => h("span"),
+    class: `monaco-icon-label ${fileIcon}`,
+    currentTab: filePath,
+    isDoubleClick: isDoubleClick,
+  });
+}
 </script>
 
 

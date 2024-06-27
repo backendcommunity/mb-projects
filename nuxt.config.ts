@@ -78,7 +78,7 @@ export default defineNuxtConfig({
     },
   },
 
-  ssr: false, //Becuase of FitAddon from Xterm
+  ssr: true, //Becuase of FitAddon from Xterm
 
   css: ["~/assets/css/main.css"],
 

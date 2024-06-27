@@ -62,10 +62,11 @@
 
 <script setup>
 import { Terminal } from "@xterm/xterm";
-import { FitAddon } from "@xterm/addon-fit";
 import debounce from "../helpers/debounce";
 import { ITerminalColor } from "../helpers/types";
 import "xterm/css/xterm.css";
+
+const { $FitAddon } = useNuxtApp();
 
 let fitAddon;
 const terminal = ref(null);
@@ -92,7 +93,7 @@ function init() {
     theme: { background: "#191919" },
   });
 
-  fitAddon = new FitAddon();
+  fitAddon = new $FitAddon();
   terminal.value.loadAddon(fitAddon);
 
   terminal.value.open(document.getElementById("terminal-container"));
@@ -135,14 +136,11 @@ function init() {
 
 onMounted(() => {
   init();
-});
-
-onMounted(() => {
   const observeEl = terminalRef.value;
   const resizeObserver = new ResizeObserver(
     debounce(
       () => {
-        if (terminalRef.value) fitAddon.fit();
+        if (terminalRef.value) fitAddon?.fit();
       },
       500,
       null
