@@ -263,7 +263,9 @@ function back() {
 }
 
 #article ul li,
-#article ol li {
+#article ol li,
+#article ul li p,
+#article ol li p {
   line-height: 32px;
   font-size: 1.125rem;
   font-weight: 400;
