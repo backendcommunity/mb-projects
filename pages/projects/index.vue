@@ -17,7 +17,8 @@
             class="flex lg:flex-row flex-col md:grid grid-cols-3 gap-10 w-full"
           >
             <Project
-              v-for="(item, index) in [1, 2, 3, 4, 5, 6].push(1, 2, 3, 4, 5, 6)"
+              :project="project"
+              v-for="(project, index) in projects"
               :key="index"
             />
           </div>
@@ -37,6 +38,8 @@
 
 
 <script setup>
+const { getProjects } = await useProjects("/projects");
+const projects = await getProjects();
 </script>
 
 <style>

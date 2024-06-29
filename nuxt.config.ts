@@ -94,6 +94,13 @@ export default defineNuxtConfig({
     ],
   },
 
+  runtimeConfig: {
+    public: {
+      STRAPI_TOKEN: process.env.STRAPI_TOKEN,
+      BASE_ENDPOINT_URL: process.env.BASE_ENDPOINT_URL,
+    },
+  },
+
   monacoEditor: {
     // These are default values:
     locale: "en",
