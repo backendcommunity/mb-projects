@@ -1,19 +1,25 @@
 export async function useProjects(url: string) {
   const config = useRuntimeConfig();
 
+  console.log(config, "asjnajks");
+
   async function init(url: string, data: any) {
-    return await useFetch(url, {
-      ...data,
-      baseURL: config.public.BASE_ENDPOINT_URL,
-      query: {
-        ...data?.query,
-      },
-      headers: {
-        Authorization: `bearer ${config.public.STRAPI_TOKEN}`,
-        "Content-Type": "application/json",
-        ...data?.headers,
-      },
-    });
+    try {
+      return await useFetch(url, {
+        ...data,
+        baseURL: config.public.BASE_ENDPOINT_URL,
+        query: {
+          ...data?.query,
+        },
+        headers: {
+          Authorization: `bearer ${config.public.STRAPI_TOKEN}`,
+          "Content-Type": "application/json",
+          ...data?.headers,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function getProjects(data: any = {}) {
