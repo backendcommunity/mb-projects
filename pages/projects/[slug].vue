@@ -21,7 +21,16 @@
       >
     </div>
 
-    <section class="bg-white mb-20 max-w-7xl mx-auto px-5">
+    <section
+      v-if="!project"
+      class="bg-white mb-20 h-screen max-w-7xl mx-auto px-5"
+    >
+      <h1 class="text-4xl text-primary text-center font-bold">
+        Project not found
+      </h1>
+    </section>
+
+    <section v-else class="bg-white mb-20 max-w-7xl mx-auto px-5">
       <h1 class="text-4xl text-primary text-center font-bold">
         {{ project?.title }}
       </h1>
