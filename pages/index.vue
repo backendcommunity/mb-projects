@@ -174,15 +174,16 @@
                   Start here.
                 </h2>
                 <div class="py-5 flex flex-col w-ful gap-5">
-                  <a
-                    href="#"
+                  <nuxt-link
+                    to="/projects"
                     class="bg-secondary md:w-60 w-full text-center px-4 py-3 font-bold rounded-md text-[#fff]"
                   >
                     View All Backend Projects
-                  </a>
+                  </nuxt-link>
 
                   <a
-                    href="#"
+                    href="playground.masteringbackend.com"
+                    target="_blank"
                     class="border-secondary md:w-60 w-full text-center border border-outline px-4 py-3 font-bold rounded-md text-white"
                   >
                     Try Playground
@@ -563,12 +564,12 @@
           </div>
 
           <div>
-            <a
-              href="#"
+            <nuxt-link
+              to="/projects"
               class="border-secondary border border-outline px-8 py-3 font-bold rounded-2xl text-secondary"
             >
               View all projects
-            </a>
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -599,12 +600,12 @@
 
                 <div class="mx-auto w-full mb-5">
                   <div class="py-5">
-                    <a
-                      href="#"
+                    <nuxt-link
+                      to="/projects"
                       class="bg-primary px-4 py-3 font-bold rounded-md text-[#fff]"
                     >
                       View Projects
-                    </a>
+                    </nuxt-link>
                   </div>
                 </div>
               </div>

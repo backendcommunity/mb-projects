@@ -7,10 +7,10 @@
         <nav
           class="flex w-full items-center justify-between bg-[#0f172a] text-white p-3"
         >
-          <div class="w-16 text-2xl font-bold">
+          <nuxt-link to="/" class="w-16 text-2xl font-bold">
             <span class="text-secondary"> <span class="text-3xl"></span>MB</span
             >Projects
-          </div>
+          </nuxt-link>
 
           <div
             class="flex-1 bg-[#0f172a] flex justify-center mx-5 bg-[#1e293b] rounded-md"
