@@ -182,7 +182,7 @@
                   </nuxt-link>
 
                   <a
-                    href="playground.masteringbackend.com"
+                    href="https://playground.masteringbackend.com"
                     target="_blank"
                     class="border-secondary md:w-60 w-full text-center border border-outline px-4 py-3 font-bold rounded-md text-white"
                   >
