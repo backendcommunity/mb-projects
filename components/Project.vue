@@ -43,13 +43,13 @@
           class="items-center grid md:grid-cols-3 grid-cols-2 gap-2 text-center"
         >
           <span
-            class="rounded-md border py-0.5 px-2 text-secondary/90 bg-secondary/40 border-secondary/50"
+            class="rounded-md border py-0.5 px-2 text-xs text-gray-700 bg-white border-gray-300"
             >{{ project?.category }}</span
           >
           <span
             v-for="(item, i) in project.tags"
             :key="i"
-            class="rounded-md border py-0.5 px-2 text-red-600/90 bg-red-600/40 border-red-600/50"
+            class="rounded-md border py-0.5 px-2 text-xs text-gray-700 bg-white border-gray-300"
             >{{ item }}</span
           >
         </div>
