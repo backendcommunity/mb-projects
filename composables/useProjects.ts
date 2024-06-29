@@ -1,8 +1,6 @@
 export async function useProjects(url: string) {
   const config = useRuntimeConfig();
 
-  console.log(config, "asjnajks");
-
   async function init(url: string, data: any) {
     try {
       return await useFetch(url, {
