@@ -22,7 +22,7 @@
 
         <div class="md:col-span-9 border-t py-5">
           <div
-            v-if="projects.length"
+            v-if="projects?.length"
             class="flex lg:flex-row flex-col md:grid grid-cols-3 gap-10 w-full"
           >
             <Project
