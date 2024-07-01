@@ -210,9 +210,9 @@ function back() {
   font-family: "Georgia", serif !important;
 }
 
-#article p,
+#article > p,
 #article {
-  margin-bottom: 1.3rem;
+  margin-bottom: 1rem;
   font-weight: 400;
   line-height: 2;
 }
