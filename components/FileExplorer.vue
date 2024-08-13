@@ -1,91 +1,93 @@
 <template>
   <div ref="wrapper" class="monaco-with-tree">
-    <Splitpanes
-      v-if="defaultSplitPercent"
-      @resize="resize"
-      :min-percent="minSplitPercent"
-      horizontal
-      :first-splitter="false"
-      class="default-them"
-      :push-other-panes="false"
-      :default-percent="defaultSplitPercent"
-    >
-      <pane size="10" min-size="10" max-size="10">
-        <div
-          class="flex justify-between mb-2 items-enter text-gray-400 px-2 pt-2"
-        >
-          <div class="uppercase text-xs">
-            <p>Explorer</p>
-          </div>
-          <div>
-            <a
-              class="action-label codicon codicon-toolbar-more"
-              role="button"
-              aria-haspopup="true"
-              aria-expanded="false"
-              title="Views and More Actions..."
-              aria-label="Views and More Actions..."
-              tabindex="0"
-            ></a>
-          </div>
-        </div>
-
-        <div
-          class="w-full text-gray-200 flex justify-between pb-2 items-center"
-        >
-          <div class="uppercase text-xs px-3">
-            <p>Workspace</p>
+    <ClientOnly>
+      <Splitpanes
+        v-if="defaultSplitPercent"
+        @resize="resize"
+        :min-percent="minSplitPercent"
+        horizontal
+        :first-splitter="false"
+        class="default-them"
+        :push-other-panes="false"
+        :default-percent="defaultSplitPercent"
+      >
+        <pane size="10" min-size="10" max-size="10">
+          <div
+            class="flex justify-between mb-2 items-enter text-gray-400 px-2 pt-2"
+          >
+            <div class="uppercase text-xs">
+              <p>Explorer</p>
+            </div>
+            <div>
+              <a
+                class="action-label codicon codicon-toolbar-more"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                title="Views and More Actions..."
+                aria-label="Views and More Actions..."
+                tabindex="0"
+              ></a>
+            </div>
           </div>
 
-          <div class="px-3 hidden absolute right-0 group-hover:block">
-            <div class="flex gap-2">
-              <div>
-                <button
-                  data-testid="explorr"
-                  id="explorer-tab"
-                  class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <div class="codicon codicon-new-file"></div>
-                </button>
-              </div>
+          <div
+            class="w-full text-gray-200 flex justify-between pb-2 items-center"
+          >
+            <div class="uppercase text-xs px-3">
+              <p>Workspace</p>
+            </div>
 
-              <div>
-                <button
-                  data-testid="explorr"
-                  id="explorer-tab"
-                  class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <div class="codicon codicon-new-folder"></div>
-                </button>
-              </div>
+            <div class="px-3 hidden absolute right-0 group-hover:block">
+              <div class="flex gap-2">
+                <div>
+                  <button
+                    data-testid="explorr"
+                    id="explorer-tab"
+                    class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <div class="codicon codicon-new-file"></div>
+                  </button>
+                </div>
 
-              <div>
-                <button
-                  data-testid="explorr"
-                  id="explorer-tab"
-                  class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <div class="codicon codicon-refresh"></div>
-                </button>
-              </div>
+                <div>
+                  <button
+                    data-testid="explorr"
+                    id="explorer-tab"
+                    class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <div class="codicon codicon-new-folder"></div>
+                  </button>
+                </div>
 
-              <div>
-                <button
-                  data-testid="explorr"
-                  id="explorer-tab"
-                  class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <div class="codicon codicon-collapse-all"></div>
-                </button>
+                <div>
+                  <button
+                    data-testid="explorr"
+                    id="explorer-tab"
+                    class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <div class="codicon codicon-refresh"></div>
+                  </button>
+                </div>
+
+                <div>
+                  <button
+                    data-testid="explorr"
+                    id="explorer-tab"
+                    class="relative w-full disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <div class="codicon codicon-collapse-all"></div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </pane>
-      <pane size="100" class="mb-5">
-        <Tree @onTab="setTab" />
-      </pane>
-    </Splitpanes>
+        </pane>
+        <pane size="100" class="mb-5">
+          <Tree @onTab="setTab" />
+        </pane>
+      </Splitpanes>
+    </ClientOnly>
   </div>
   <!-- </div> -->
 </template>
