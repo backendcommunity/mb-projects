@@ -1,76 +1,3 @@
-<style lang="scss">
-.monaco-with-tree {
-  height: 100%;
-  background: #191919;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  &.full-screen {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh !important;
-    z-index: 100000;
-  }
-  .monaco-menu-pane {
-    height: 100%;
-  }
-  .monaco-right-pane {
-    height: 100%;
-    position: relative;
-    .vue-tabs-chrome {
-      *,
-      *::before,
-      *::after {
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-      font-size: 14px;
-      .tabs-item.monaco-icon-label::before {
-        box-sizing: content-box;
-        position: absolute;
-        left: 22px;
-        top: 5px;
-        z-index: 1;
-      }
-    }
-    .no-tab-pane {
-      background-color: #1e1e1e;
-      text-align: center;
-      position: absolute;
-      left: 0;
-      top: 48px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-  .btn-fullscreen {
-    position: absolute;
-    top: 10px;
-    right: 8px;
-    z-index: 2000;
-    color: white;
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    line-height: 24px;
-    cursor: pointer;
-    opacity: 0.8;
-    &.fullscreen {
-      position: fixed;
-    }
-    &:hover {
-      opacity: 1;
-    }
-  }
-}
-</style>
-
-
 <template>
   <div ref="menu" class="h-full monaco-menu-pane !bg-[#191919]" />
 </template>
@@ -147,7 +74,7 @@ function initMonacoTree() {
       openFile(filePath, file, fileIcon, true);
     },
   });
-  monacoTree.expandAll();
+  // monacoTree.expandAll();
   setTimeout(() => {
     if (props.defaultOpenFiles && props.defaultOpenFiles[0]) {
       monacoTree.setSelection(props.defaultOpenFiles[0]);
@@ -155,21 +82,90 @@ function initMonacoTree() {
   });
 }
 
-function setSelection(filePath) {
-  monacoTree && monacoTree.setSelection(filePath);
-}
-
 function openFile(filePath, file, fileIcon, isDoubleClick = true) {
   emit("onTab", {
     label: props.getFileTitle(filePath),
     key: filePath,
     closable: true,
-    favicon: (h) => h("span"),
+    favicon: `/vscode-icons/${fileIcon}.svg`,
     class: `monaco-icon-label ${fileIcon}`,
     currentTab: filePath,
     isDoubleClick: isDoubleClick,
   });
 }
 </script>
+
+<style lang="scss">
+.monaco-with-tree {
+  height: 100%;
+  background: #191919;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  &.full-screen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh !important;
+    z-index: 100000;
+  }
+  .monaco-menu-pane {
+    height: 100%;
+  }
+  .monaco-right-pane {
+    height: 100%;
+    position: relative;
+    .vue-tabs-chrome {
+      *,
+      *::before,
+      *::after {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+      font-size: 14px;
+      .tabs-item.monaco-icon-label::before {
+        box-sizing: content-box;
+        position: absolute;
+        left: 22px;
+        top: 5px;
+        z-index: 1;
+      }
+    }
+    .no-tab-pane {
+      background-color: #1e1e1e;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      top: 48px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .btn-fullscreen {
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    z-index: 2000;
+    color: white;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    &.fullscreen {
+      position: fixed;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+</style>
+
 
 

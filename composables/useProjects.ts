@@ -21,8 +21,8 @@ export async function useProjects(url: string) {
   }
 
   async function getProjects(data: any = {}) {
-    const res = await init(url, data);
-    const projects = res.data.value?.data;
+    const res: any = await init(url, data);
+    const projects = res?.data.value?.data;
 
     if (!projects?.length) return;
 
@@ -30,9 +30,9 @@ export async function useProjects(url: string) {
   }
 
   async function getFeaturedProjects(data: any = {}) {
-    let res = await init(`${url}/?filters[isFeatured][$eq]=true`, data);
+    let res: any = await init(`${url}/?filters[isFeatured][$eq]=true`, data);
 
-    const projects = res.data.value?.data;
+    const projects = res?.data.value?.data;
 
     if (!projects?.length) return;
 
@@ -40,9 +40,9 @@ export async function useProjects(url: string) {
   }
 
   async function getProject(slug: string, data: any = {}) {
-    let res = await init(`${url}/?filters[slug][$eq]=${slug}`, data);
+    let res: any = await init(`${url}/?filters[slug][$eq]=${slug}`, data);
 
-    const projects = res.data?.value?.data;
+    const projects = res?.data?.value?.data;
 
     if (!projects?.length) return;
 

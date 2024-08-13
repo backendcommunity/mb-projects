@@ -94,11 +94,9 @@
 
 <script setup>
 const emit = defineEmits(["onTab"]);
-const isFullScreen = ref(false);
-const tabHeight = ref(48);
 const wrapper = ref(null);
-const defaultSplitPercent = ref(0); // 默认菜单分隔宽度百分比
-const minSplitPercent = ref(0); // 最小宽度百分比
+const defaultSplitPercent = ref(0);
+const minSplitPercent = ref(0);
 
 onMounted(() => {
   const totalWith =

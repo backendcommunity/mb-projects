@@ -13,7 +13,7 @@
           @click="handleTabClick"
           :tabs="tabs"
           :style="{ backgroundColor: `#${editorTheme}` }"
-          class="theme-dark text-center"
+          class="theme-dark pl-2"
           insert-to-after
         >
         </vue-tabs-chrome>
@@ -52,15 +52,23 @@
           class="text-[#cccccc] text-sm px-5 py-4 flex gap-0.5 items-center"
         >
           <span>code</span>
-          <div class="codicon codicon-chevron-right"></div>
-          <span class="flex items-center gap-1">
+          <span
+            class="flex items-center"
+            v-for="(menu, i) in splitMenu(currentTab)"
+            :key="i"
+          >
+            <div class="codicon codicon-chevron-right"></div>
             <img
               width="16px"
               height="22px"
-              src="https://codedamn.com/assets/vscode/extension-assets/material-icons/icons/javascript.svg"
+              :src="`/vscode-icons/${getFileIconLabel(
+                menu?.title,
+                menu?.isDirectory
+              )}.svg`"
               alt=""
+              class="pr-0.5"
             />
-            {{ getFileName }}</span
+            {{ menu?.title }}</span
           >
         </div>
 
@@ -93,7 +101,7 @@
           class="no-tab-pane"
           :style="{ height: `calc(100% - ${tabHeight}px)` }"
         >
-          <div class="center-wrapper">请从左侧打开一个文件</div>
+          <div class="center-wrapper">Please open a file from the left</div>
         </div>
       </div>
     </div>
@@ -101,12 +109,10 @@
 </template>
 
 <script setup>
-import { onBeforeMount, reactive, watch } from "vue";
+import { onBeforeMount, watch } from "vue";
+import { getFileIconLabel } from "~/helpers";
 
-const config = useRuntimeConfig();
-const { $toast } = useNuxtApp();
 const monaco = useMonaco();
-// const colorMode = useColorMode();
 const tabHeight = ref(48);
 let monacoEditor = null;
 const loading = ref(false);
@@ -115,10 +121,9 @@ const tabRef = ref(null);
 const monacoRef = ref(null);
 const props = defineProps(["id", "lang", "tab"]);
 const editorTheme = ref("");
-const currentTab = ref("");
+const currentTab = ref("google");
 const tabs = ref([]);
 
-const theme = ref("system");
 const isFullScreen = ref(false);
 const options = ref({
   automaticLayout: true,
@@ -179,7 +184,7 @@ watch(
           label: tab.label,
           key: tab.key,
           closable: tab.closable,
-          favicon: (h) => h("span"),
+          favico: tab.favicon,
           class: tab.class,
         });
       }
@@ -200,25 +205,6 @@ const getLanguage = computed(() => {
   const lang = modeMap[ext?.toLowerCase()] || "markdown";
 
   return lang;
-});
-
-const getExtension = computed(() => {
-  const modeMap = {
-    js: "javascript",
-    json: "json",
-    html: "html",
-    md: "markdown",
-  };
-
-  const ext = props?.tab?.currentTab?.slice(
-    props?.tab?.currentTab?.lastIndexOf(".") + 1
-  );
-
-  return ext;
-});
-
-const getFileName = computed(() => {
-  return props?.tab?.label;
 });
 
 const getContent = computed(() => {
@@ -255,6 +241,16 @@ function getFileContent(filePath) {
 // Write, Edit and Run your Javascript code using JS Online Compiler
     
 console.log("Try masteringbackend.com");`;
+}
+
+function splitMenu(filePath) {
+  const files = filePath?.split("/");
+  return files?.map((f, i, filesArr) => {
+    return {
+      title: f,
+      isDirectory: filesArr[filesArr.length - 1] !== filesArr[i],
+    };
+  });
 }
 </script>
 
