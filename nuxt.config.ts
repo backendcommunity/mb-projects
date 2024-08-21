@@ -98,6 +98,7 @@ export default defineNuxtConfig({
     public: {
       STRAPI_TOKEN: process.env.STRAPI_TOKEN,
       BASE_ENDPOINT_URL: process.env.BASE_ENDPOINT_URL,
+      MB_API_URL: process.env.MB_API_URL,
     },
   },
 

@@ -331,6 +331,8 @@
           >
             <!-- 1 -->
             <div
+              v-for="(course, i) in featuredCourses"
+              :key="i"
               class="flex flex-col mx-auto overflow-hidden border border-solid border-gray-200 rounded bg-white transform transition hover:-translate-y-1.5 hover:shadow:xl duration-500"
             >
               <div class="relative flex h-40 w-ful items-center justify-center">
@@ -353,90 +355,16 @@
                       "
                     >
                       <img
+                        v-if="course?.banner"
                         class="img-fluid w-full"
-                        src="~/assets/img/UX img.png"
-                        alt=""
+                        :src="course?.banner"
+                        :alt="course?.title"
                       />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="p-5 mb-1.5 relative space-y-2"
-                style="min-height: 148px"
-              >
-                <div class="flex justify-between mb-5">
-                  <h3
-                    class="rounded-md border p-2 bg-green-300/40 border-green-400/50 text-green-900/90"
-                  >
-                    Text-based
-                  </h3>
 
-                  <h3
-                    class="rounded-md border p-2 bg-red-300/40 border-red-400/50 text-red-900/90"
-                  >
-                    Free
-                  </h3>
-                </div>
-                <div class="my-5">
-                  <h2 class="font-medium text-xl">
-                    Build FinPay: A FinTech Solution
-                  </h2>
-                </div>
-                <article class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-                  dicta quis aliquid odit, modi veritatis placeat, cupiditate
-                  magni porro consectetur ullam, magnam autem in? Tempora ea
-                  deleniti quidem possimus molestias?
-                </article>
-              </div>
-
-              <div class="flex justify-between items-center text-secondary p-5">
-                <div class="flex items-center">
-                  <span>
-                    <img
-                      class="star-img"
-                      src="~/assets/img/openbook-icon.png"
-                      alt=""
-                    />
-                  </span>
-                  <span class="text-sm px-2">7+ Contents</span>
-                </div>
-                <NuxtLink
-                  class="px-4 py-2 border-solid border border-secondary rounded"
-                  :to="`#`"
-                >
-                  <p class="text-sm font-semibold">Start Building</p>
-                </NuxtLink>
-              </div>
-            </div>
-            <!-- 2 -->
-            <div
-              class="flex flex-col mx-auto overflow-hidden border border-solid border-gray-200 rounded bg-white transform transition hover:-translate-y-1.5 hover:shadow:xl duration-500"
-            >
-              <div class="relative flex h-40 w-ful items-center justify-center">
-                <div class="w-full">
-                  <div class="h-full w-full">
-                    <figure
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                    >
                       <img
-                        class="img-fluid w-full"
+                        v-else
                         src="~/assets/img/UX img.png"
-                        alt=""
+                        :alt="course?.title"
                       />
                     </figure>
                   </div>
@@ -450,26 +378,24 @@
                   <h3
                     class="rounded-md border p-2 bg-green-300/40 border-green-400/50 text-green-900/90"
                   >
-                    Text-based
+                    {{ course?.type }}
                   </h3>
 
                   <h3
                     class="rounded-md border p-2 bg-red-300/40 border-red-400/50 text-red-900/90"
                   >
-                    $50
+                    {{ course?.isPremium ? `$${course?.amount}` : "Free" }}
                   </h3>
                 </div>
                 <div class="my-5">
                   <h2 class="font-medium text-xl">
-                    Build FinPay: A FinTech Solution
+                    {{ course?.title }}
                   </h2>
                 </div>
-                <article class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-                  dicta quis aliquid odit, modi veritatis placeat, cupiditate
-                  magni porro consectetur ullam, magnam autem in? Tempora ea
-                  deleniti quidem possimus molestias?
-                </article>
+                <div
+                  class="text-sm text-gray-600"
+                  v-html="course?.summary"
+                ></div>
               </div>
 
               <div class="flex justify-between items-center text-secondary p-5">
@@ -481,338 +407,16 @@
                       alt=""
                     />
                   </span>
-                  <span class="text-sm px-2">7+ Contents</span>
+                  <span class="text-sm px-2"
+                    >{{ totalContent(course) }}+ Contents</span
+                  >
                 </div>
-                <NuxtLink
+                <a
                   class="px-4 py-2 border-solid border border-secondary rounded"
-                  :to="`#`"
+                  :href="`https://app.masteringbackend.com/courses/${course?.slug}?ref=project_featured_courses`"
                 >
-                  <p class="text-sm font-semibold">Start Building</p>
-                </NuxtLink>
-              </div>
-            </div>
-            <!-- 3 -->
-            <div
-              class="flex flex-col mx-auto overflow-hidden border border-solid border-gray-200 rounded bg-white transform transition hover:-translate-y-1.5 hover:shadow:xl duration-500"
-            >
-              <div class="relative flex h-40 w-ful items-center justify-center">
-                <div class="w-full">
-                  <div class="h-full w-full">
-                    <figure
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                    >
-                      <img
-                        class="img-fluid w-full"
-                        src="~/assets/img/UX img.png"
-                        alt=""
-                      />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="p-5 mb-1.5 relative space-y-2"
-                style="min-height: 148px"
-              >
-                <div class="flex justify-between mb-5">
-                  <h3
-                    class="rounded-md border p-2 bg-green-300/40 border-green-400/50 text-green-900/90"
-                  >
-                    Text-based
-                  </h3>
-
-                  <h3
-                    class="rounded-md border p-2 bg-red-300/40 border-red-400/50 text-red-900/90"
-                  >
-                    Free
-                  </h3>
-                </div>
-                <div class="my-5">
-                  <h2 class="font-medium text-xl">
-                    Build FinPay: A FinTech Solution
-                  </h2>
-                </div>
-                <article class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-                  dicta quis aliquid odit, modi veritatis placeat, cupiditate
-                  magni porro consectetur ullam, magnam autem in? Tempora ea
-                  deleniti quidem possimus molestias?
-                </article>
-              </div>
-
-              <div class="flex justify-between items-center text-secondary p-5">
-                <div class="flex items-center">
-                  <span>
-                    <img
-                      class="star-img"
-                      src="~/assets/img/openbook-icon.png"
-                      alt=""
-                    />
-                  </span>
-                  <span class="text-sm px-2">7+ Contents</span>
-                </div>
-                <NuxtLink
-                  class="px-4 py-2 border-solid border border-secondary rounded"
-                  :to="`#`"
-                >
-                  <p class="text-sm font-semibold">Start Building</p>
-                </NuxtLink>
-              </div>
-            </div>
-            <!-- 4 -->
-            <div
-              class="flex flex-col mx-auto overflow-hidden border border-solid border-gray-200 rounded bg-white transform transition hover:-translate-y-1.5 hover:shadow:xl duration-500"
-            >
-              <div class="relative flex h-40 w-ful items-center justify-center">
-                <div class="w-full">
-                  <div class="h-full w-full">
-                    <figure
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                    >
-                      <img
-                        class="img-fluid w-full"
-                        src="~/assets/img/UX img.png"
-                        alt=""
-                      />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="p-5 mb-1.5 relative space-y-2"
-                style="min-height: 148px"
-              >
-                <div class="flex justify-between mb-5">
-                  <h3
-                    class="rounded-md border p-2 bg-green-300/40 border-green-400/50 text-green-900/90"
-                  >
-                    Text-based
-                  </h3>
-
-                  <h3
-                    class="rounded-md border p-2 bg-red-300/40 border-red-400/50 text-red-900/90"
-                  >
-                    $100
-                  </h3>
-                </div>
-                <div class="my-5">
-                  <h2 class="font-medium text-xl">
-                    Build FinPay: A FinTech Solution
-                  </h2>
-                </div>
-                <article class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-                  dicta quis aliquid odit, modi veritatis placeat, cupiditate
-                  magni porro consectetur ullam, magnam autem in? Tempora ea
-                  deleniti quidem possimus molestias?
-                </article>
-              </div>
-
-              <div class="flex justify-between items-center text-secondary p-5">
-                <div class="flex items-center">
-                  <span>
-                    <img
-                      class="star-img"
-                      src="~/assets/img/openbook-icon.png"
-                      alt=""
-                    />
-                  </span>
-                  <span class="text-sm px-2">7+ Contents</span>
-                </div>
-                <NuxtLink
-                  class="px-4 py-2 border-solid border border-secondary rounded"
-                  :to="`#`"
-                >
-                  <p class="text-sm font-semibold">Start Building</p>
-                </NuxtLink>
-              </div>
-            </div>
-            <!-- 5 -->
-            <div
-              class="flex flex-col mx-auto overflow-hidden border border-solid border-gray-200 rounded bg-white transform transition hover:-translate-y-1.5 hover:shadow:xl duration-500"
-            >
-              <div class="relative flex h-40 w-ful items-center justify-center">
-                <div class="w-full">
-                  <div class="h-full w-full">
-                    <figure
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                    >
-                      <img
-                        class="img-fluid w-full"
-                        src="~/assets/img/UX img.png"
-                        alt=""
-                      />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="p-5 mb-1.5 relative space-y-2"
-                style="min-height: 148px"
-              >
-                <div class="flex justify-between mb-5">
-                  <h3
-                    class="rounded-md border p-2 bg-green-300/40 border-green-400/50 text-green-900/90"
-                  >
-                    Text-based
-                  </h3>
-
-                  <h3
-                    class="rounded-md border p-2 bg-red-300/40 border-red-400/50 text-red-900/90"
-                  >
-                    $150
-                  </h3>
-                </div>
-                <div class="my-5">
-                  <h2 class="font-medium text-xl">
-                    Build FinPay: A FinTech Solution
-                  </h2>
-                </div>
-                <article class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-                  dicta quis aliquid odit, modi veritatis placeat, cupiditate
-                  magni porro consectetur ullam, magnam autem in? Tempora ea
-                  deleniti quidem possimus molestias?
-                </article>
-              </div>
-
-              <div class="flex justify-between items-center text-secondary p-5">
-                <div class="flex items-center">
-                  <span>
-                    <img
-                      class="star-img"
-                      src="~/assets/img/openbook-icon.png"
-                      alt=""
-                    />
-                  </span>
-                  <span class="text-sm px-2">7+ Contents</span>
-                </div>
-                <NuxtLink
-                  class="px-4 py-2 border-solid border border-secondary rounded"
-                  :to="`#`"
-                >
-                  <p class="text-sm font-semibold">Start Building</p>
-                </NuxtLink>
-              </div>
-            </div>
-            <!-- 6 -->
-            <div
-              class="flex flex-col mx-auto overflow-hidden border border-solid border-gray-200 rounded bg-white transform transition hover:-translate-y-1.5 hover:shadow:xl duration-500"
-            >
-              <div class="relative flex h-40 w-ful items-center justify-center">
-                <div class="w-full">
-                  <div class="h-full w-full">
-                    <figure
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                    >
-                      <img
-                        class="img-fluid w-full"
-                        src="~/assets/img/UX img.png"
-                        alt=""
-                      />
-                    </figure>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="p-5 mb-1.5 relative space-y-2"
-                style="min-height: 148px"
-              >
-                <div class="flex justify-between mb-5">
-                  <h3
-                    class="rounded-md border p-2 bg-green-300/40 border-green-400/50 text-green-900/90"
-                  >
-                    Text-based
-                  </h3>
-
-                  <h3
-                    class="rounded-md border p-2 bg-red-300/40 border-red-400/50 text-red-900/90"
-                  >
-                    Free
-                  </h3>
-                </div>
-                <div class="my-5">
-                  <h2 class="font-medium text-xl">
-                    Build FinPay: A FinTech Solution
-                  </h2>
-                </div>
-                <article class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-                  dicta quis aliquid odit, modi veritatis placeat, cupiditate
-                  magni porro consectetur ullam, magnam autem in? Tempora ea
-                  deleniti quidem possimus molestias?
-                </article>
-              </div>
-
-              <div class="flex justify-between items-center text-secondary p-5">
-                <div class="flex items-center">
-                  <span>
-                    <img
-                      class="star-img"
-                      src="~/assets/img/openbook-icon.png"
-                      alt=""
-                    />
-                  </span>
-                  <span class="text-sm px-2">7+ Contents</span>
-                </div>
-                <NuxtLink
-                  class="px-4 py-2 border-solid border border-secondary rounded"
-                  :to="`#`"
-                >
-                  <p class="text-sm font-semibold">Start Building</p>
-                </NuxtLink>
+                  <p class="text-sm font-semibold">Start Watching</p>
+                </a>
               </div>
             </div>
           </div>
@@ -820,7 +424,7 @@
           <div>
             <a
               target="_blank"
-              href="https://masteringbackend.com/courses"
+              href="https://masteringbackend.com/courses/single"
               class="border-secondary border border-outline px-8 py-3 font-bold rounded-2xl text-secondary"
             >
               View all courses
@@ -993,7 +597,17 @@
 
 <script setup>
 const { getFeaturedProjects } = await useProjects("/projects");
+const { getCourses } = await useCourses();
 const projects = await getFeaturedProjects();
+const courses = await getCourses();
+
+const featuredCourses = computed(() => courses?.slice(0, 6));
+
+function totalContent(course) {
+  return course?.chapters?.reduce((a, c) => {
+    return a + (c.videos?.length + c.articles?.length);
+  }, 0);
+}
 </script>
 
 <style>
