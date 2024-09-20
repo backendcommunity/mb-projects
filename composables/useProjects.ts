@@ -1,7 +1,7 @@
-export async function useProjects(url: string) {
+export async function useProjects(url: string = "/projects") {
   const config = useRuntimeConfig();
 
-  async function init(url: string, data: any) {
+  async function init(url: string = "/projects", data: any) {
     try {
       return await useFetch(url, {
         ...data,
@@ -16,12 +16,12 @@ export async function useProjects(url: string) {
         },
       });
     } catch (err) {
-      console.log(err);
+      console.log(err, "dada");
     }
   }
 
   async function getProjects(data: any = {}) {
-    const res: any = await init(url, data);
+    const res: any = await init("/projects", data);
     const projects = res?.data.value?.data;
 
     if (!projects?.length) return;
@@ -31,6 +31,32 @@ export async function useProjects(url: string) {
 
   async function getFeaturedProjects(data: any = {}) {
     let res: any = await init(`${url}/?filters[isFeatured][$eq]=true`, data);
+
+    const projects = res?.data.value?.data;
+
+    if (!projects?.length) return;
+
+    return resolveProjects(projects);
+  }
+
+  async function getProjectsByLevel(data: any = {}) {
+    let res: any = await init(
+      `${url}/?filters[level][$eq]=${data.level}`,
+      data
+    );
+
+    const projects = res?.data.value?.data;
+
+    if (!projects?.length) return;
+
+    return resolveProjects(projects);
+  }
+
+  async function getProjectsByCategory(data: any = {}) {
+    let res: any = await init(
+      `${url}/?filters[category][$eq]=${data.category}`,
+      data
+    );
 
     const projects = res?.data.value?.data;
 
@@ -49,6 +75,19 @@ export async function useProjects(url: string) {
     return resolveProjects(projects)[0];
   }
 
+  async function getLanguageProjects(data: any = {}) {
+    try {
+      const customURL = `${url}?tags[]=${data?.language}`;
+      let res: any = await init(customURL, data);
+      const projects = res?.data?.value?.data;
+      if (!projects?.length) return [];
+
+      return filterByTags(resolveProjects(projects), data?.language);
+    } catch (er) {
+      console.log(er);
+    }
+  }
+
   const resolveProjects = (projects: any) => {
     return projects?.map((project: any) => {
       return {
@@ -58,9 +97,18 @@ export async function useProjects(url: string) {
     });
   };
 
+  const filterByTags = (projects: any, tag: string) => {
+    return projects.filter((project: any) =>
+      project.tags.map((t: any) => t.toLowerCase()).includes(tag.toLowerCase())
+    );
+  };
+
   return {
     getProjects,
     getProject,
     getFeaturedProjects,
+    getLanguageProjects,
+    getProjectsByCategory,
+    getProjectsByLevel,
   };
 }
