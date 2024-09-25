@@ -20,8 +20,11 @@ export async function useProjects(url: string = "/projects") {
     }
   }
 
-  async function getProjects(data: any = {}) {
-    const res: any = await init("/projects", data);
+  async function getProjects(data: any = { page: 0, count: 100 }) {
+    const res: any = await init(
+      `/projects?pagination[page]=${data.page}&pagination[pageSize]=${data.count}`,
+      data
+    );
     const projects = res?.data.value?.data;
 
     if (!projects?.length) return;
