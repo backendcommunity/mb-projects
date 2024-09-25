@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="px-10 pt-20 md:pt-40"></div>
@@ -21,15 +20,8 @@
         </div>
 
         <div class="md:col-span-9 border-t py-5">
-          <div
-            v-if="projects?.length"
-            class="flex lg:flex-row flex-col md:grid grid-cols-3 gap-10 w-full"
-          >
-            <Project
-              :project="project"
-              v-for="(project, index) in projects"
-              :key="index"
-            />
+          <div v-if="projects?.length" class="flex lg:flex-row flex-col md:grid grid-cols-3 gap-10 w-full">
+            <Project :project="project" v-for="(project, index) in projects" :key="index" />
           </div>
 
           <h2 v-else class="text-4xl text-primary font-bold">
@@ -44,8 +36,7 @@
 <script setup>
 </script>
 
-<style>
-</style>
+<style></style>
 
 
 
@@ -53,7 +44,7 @@
 <script setup>
 const { getProjects } = await useProjects("/projects");
 const projects = await getProjects();
+console.log(projects?.length)
 </script>
 
-<style>
-</style>
+<style></style>
