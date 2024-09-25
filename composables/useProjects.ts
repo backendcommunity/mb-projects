@@ -42,7 +42,7 @@ export async function useProjects(url: string = "/projects") {
     return resolveProjects(projects);
   }
 
-  async function getProjectsByLevel(data: any = { page: 0, count: 100 }) {
+  async function getProjectsByLevel(data: any = {}) {
     let res: any = await init(
       `${url}/?filters[level][$eq]=${data.level}&pagination[page]=${data.page}&pagination[pageSize]=${data.count}`,
       data
@@ -55,7 +55,7 @@ export async function useProjects(url: string = "/projects") {
     return resolveProjects(projects);
   }
 
-  async function getProjectsByCategory(data: any = { page: 0, count: 100 }) {
+  async function getProjectsByCategory(data: any = {}) {
     let res: any = await init(
       `${url}/?filters[category][$eq]=${data.category}&pagination[page]=${data.page}&pagination[pageSize]=${data.count}`,
       data
@@ -78,7 +78,7 @@ export async function useProjects(url: string = "/projects") {
     return resolveProjects(projects)[0];
   }
 
-  async function getLanguageProjects(data: any = { page: 0, count: 100 }) {
+  async function getLanguageProjects(data: any = {}) {
     try {
       const customURL = `${url}?tags[]=${data?.language}&pagination[page]=${data.page}&pagination[pageSize]=${data.count}`;
       let res: any = await init(customURL, data);

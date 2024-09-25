@@ -111,20 +111,24 @@ async function loadProjects() {
   if (query.type.includes("category"))
     return await getProjectsByCategory({
       category: language.value,
+      page: 0, count: 100
     });
 
   if (query.type.includes("premium"))
     return await getLanguageProjects({
       level: language.value,
+      page: 0, count: 100
     });
 
   if (query.type.includes("level"))
     return await getProjectsByLevel({
       level: language.value,
+      page: 0, count: 100
     });
 
   return await getLanguageProjects({
     language: language.value,
+    page: 0, count: 100
   });
 }
 
