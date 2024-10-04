@@ -67,13 +67,22 @@
               </p>
 
               <a
+                v-if="project?.isPremium"
+                :href="project?.url"
+                target="_blank"
+                disabled="true"
+                class="px-6 py-3 w-full bg-secondary text-white text-center font-bold text-md uppercase rounded block"
+              >
+                <span>Unlock Pro Now</span>
+              </a>
+
+              <a
                 href="https://app.encharge.io/public/view-form/6e59989d-810e-4dfa-9507-fef0bce7abca"
                 target="_blank"
                 disabled="true"
                 class="px-6 py-3 w-full bg-secondary text-white text-center font-bold text-md uppercase rounded block"
               >
-                <span v-if="project?.isPremium">Unlock Pro Now</span>
-                <span v-else>
+                <span>
                   Start Building
                   <span class="text-xs capitalize"> (Be Notified)</span></span
                 >
