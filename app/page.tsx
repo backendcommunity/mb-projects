@@ -1,154 +1,155 @@
 import type { Metadata } from "next";
-import { Clock, Code, Layout } from "lucide-react";
-import { HeroIllustration } from "@/components/hero-illustration";
-import Testimonials from "@/components/testimonials";
-import { FAQSection } from "@/components/faq-section";
-import { Footer } from "@/components/Footer";
-import { BrowseSection } from "@/components/browse-section";
-import { stripHtml } from "@/lib/utils";
+import { Suspense } from "react";
+import { Layers, Code, Trophy } from "lucide-react";
 import { Header } from "@/components/header";
+import { HeroVideo } from "@/components/hero-video";
+import { ProjectsBrowse } from "@/components/projects-browse";
+import type { ProjectItem } from "@/components/project-card";
+import { RecommendedProjects } from "@/components/recommended-projects";
+import { PracticeSteps } from "@/components/practice-steps";
+import { ProjectsCTA } from "@/components/projects-cta";
+import Testimonials from "@/components/testimonials";
+import { Footer } from "@/components/Footer";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://demo.masteringbackend.com/api/v3";
+const SITE_URL = "https://projects.masteringbackend.com";
 
-// ─── Metadata ─────────────────────────────────────────────────────────────────
+// Render per-request so filter query params drive metadata (canonical/OG/title).
+export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "MasteringBackend — Backend, AI & Engineering Courses",
-  description:
-    "Structured learning paths for backend, AI, cloud, DevOps, and product engineering. Learn on your schedule, build real-world skills, and transform your tech career.",
-  keywords: [
-    "backend engineering courses",
-    "learn backend development",
-    "AI engineering courses",
-    "cloud engineering",
-    "DevOps training",
-    "software engineering career",
-    "online coding courses",
-    "tech career transformation",
-  ],
-  alternates: {
-    canonical: "https://masteringbackend.com",
-  },
-  openGraph: {
-    type: "website",
-    url: "https://masteringbackend.com",
-    title: "MasteringBackend — Backend, AI & Engineering Courses",
-    description:
-      "Structured learning paths for backend, AI, cloud, DevOps, and product engineering. Build real-world skills and transform your tech career.",
-    images: [
-      {
-        url: "/home-image.png",
-        width: 1200,
-        height: 630,
-        alt: "MasteringBackend — Backend, AI & Engineering Courses",
-      },
+// ─── Filter-aware metadata (programmatic SEO) ──────────────────────────────────
+
+type SearchParams = { [key: string]: string | string[] | undefined };
+
+function readFilters(sp: SearchParams) {
+  const list = (k: string): string[] => {
+    const v = sp[k];
+    const s = Array.isArray(v) ? v.join(",") : v || "";
+    return s
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean);
+  };
+  const q = (Array.isArray(sp.q) ? sp.q[0] : sp.q) || "";
+  return {
+    q,
+    languages: list("language"),
+    categories: list("category"),
+    technologies: list("technology"),
+    levels: list("level"),
+  };
+}
+
+function canonicalFor(f: ReturnType<typeof readFilters>): string {
+  const params = new URLSearchParams();
+  if (f.q) params.set("q", f.q);
+  if (f.languages.length) params.set("language", f.languages.join(","));
+  if (f.categories.length) params.set("category", f.categories.join(","));
+  if (f.technologies.length) params.set("technology", f.technologies.join(","));
+  if (f.levels.length) params.set("level", f.levels.join(","));
+  const qs = params.toString();
+  return qs ? `${SITE_URL}/?${qs}` : SITE_URL;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}): Promise<Metadata> {
+  const f = readFilters(await searchParams);
+  const facets = [...f.levels, ...f.languages, ...f.categories, ...f.technologies];
+
+  const titleCore = facets.length
+    ? `${facets.join(", ")} Backend Projects`
+    : f.q
+      ? `Projects matching “${f.q}”`
+      : "Build Real-World Backend Projects";
+
+  const description = facets.length
+    ? `Browse ${facets.join(", ")} backend projects on MasteringBackend. Build real-world systems in our in-browser playground and grow your engineering portfolio.`
+    : "Practice backend engineering by building real-world projects. From Go to Rust, Docker to system design — build with our in-browser playground and grow your engineering portfolio.";
+
+  // NOTE: canonical + og:url are rendered manually in the page component
+  // (React hoists them to <head>) because Next strips query strings from
+  // `alternates.canonical` / `openGraph.url`, which we need for faceted pSEO.
+  return {
+    title: `${titleCore} | MasteringBackend`,
+    description,
+    keywords: [
+      "backend projects",
+      "build backend api",
+      ...f.languages.map((l) => `${l} projects`),
+      ...f.categories.map((c) => `${c} backend projects`),
+      ...f.technologies,
+      "backend engineering portfolio",
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "MasteringBackend — Backend, AI & Engineering Courses",
-    description:
-      "Structured learning paths for backend, AI, cloud, DevOps, and product engineering.",
-    images: ["/home-image.png"],
-  },
-};
-
-// ─── Static data ──────────────────────────────────────────────────────────────
-
-const FAQS = [
-  {
-    question: "What is Backend Engineering?",
-    answer:
-      "Backend engineering is the discipline of designing, building, and maintaining the server-side systems that power real products — APIs, databases, authentication, background jobs, and infrastructure. It's not just writing code. It's owning the systems that keep businesses running in production.",
-  },
-  {
-    question: "How can I learn Backend Engineering?",
-    answer:
-      "Not by watching tutorials. You learn backend engineering by building real, production-grade systems — starting with a working API backed by a real database, authentication, error handling, and deployable architecture. At Masteringbackend, we follow a structured Learn → Build → Grow system that moves you from understanding backend concepts to shipping real systems to getting hired.",
-  },
-  {
-    question: "What skills are required for Backend Engineering?",
-    answer:
-      "You need proficiency in at least one backend language (Node.js, Python, Go, or Rust), strong database design skills, API architecture, authentication and authorization, error handling, environment configuration, testing, and the ability to reason about system trade-offs. The real skill is designing systems that work in production — not just passing syntax quizzes.",
-  },
-  {
-    question: "What can I use Backend Engineering for?",
-    answer:
-      "Backend engineers build the core systems behind every product you use — payment processing, user authentication, data pipelines, real-time messaging, search engines, and more. It's one of the most in-demand and highest-paid engineering specializations because companies need engineers who can design, ship, and scale production systems.",
-  },
-  {
-    question: "Is Backend Engineering a good career?",
-    answer:
-      "Backend engineering is one of the most stable, high-paying, and in-demand careers in tech. But 'good career' depends on you. If you're willing to master system design, ship real projects, and defend your engineering decisions — the market will pay you well. If you're looking for shortcuts, this isn't the right field.",
-  },
-  {
-    question: "Is it difficult to become a Backend Engineer?",
-    answer:
-      "It demands real effort. You have to move past tutorials and actually build systems that run, break, and get fixed. Most people stall because they consume content without building anything. The ones who succeed are the ones who ship real systems, explain their design decisions, and treat learning like engineering work — not entertainment.",
-  },
-  {
-    question: "Does Backend Engineering require coding?",
-    answer:
-      "Yes — there are no shortcuts here. You need strong programming fundamentals, the ability to write production-quality code, and fluency in at least one backend language. Beyond syntax, you need to understand data modeling, API contracts, error handling, and how systems behave under real-world conditions.",
-  },
-  {
-    question: "How long does it take to become a Backend Engineer?",
-    answer:
-      "With focused, structured effort, you can ship your first production-grade backend system within weeks and reach job-ready status in 3–6 months. But timelines depend on how seriously you treat the work. Watching videos doesn't count. Building, defending, and iterating on real systems is what gets you hired.",
-  },
-];
+    openGraph: {
+      type: "website",
+      title: `${titleCore} | MasteringBackend`,
+      description,
+      images: [
+        {
+          url: "/home-image.png",
+          width: 1200,
+          height: 630,
+          alt: titleCore,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${titleCore} | MasteringBackend`,
+      description,
+      images: ["/home-image.png"],
+    },
+  };
+}
 
 // ─── Data fetching ────────────────────────────────────────────────────────────
 
-async function getInitialData() {
+async function getProjects(): Promise<{
+  projects: ProjectItem[];
+  recommended: ProjectItem[];
+}> {
   try {
-    const [roadmapsRes, coursesRes] = await Promise.all([
-      fetch(`${API_URL}/public/roadmaps`, { next: { revalidate: 3600 } }),
-      fetch(`${API_URL}/public/courses`, { next: { revalidate: 3600 } }),
-    ]);
-
-    const roadmapsData = roadmapsRes.ok ? await roadmapsRes.json() : {};
-    const coursesData = coursesRes.ok ? await coursesRes.json() : {};
-
-    const courses = (coursesData.courses ?? []).map((c: any) => ({
-      slug: c.slug,
-      id: c.id,
-      title: c.title,
-      level: c.level || "Intermediate",
-      users: c.totalStudents || 0,
-      desc: stripHtml(c.summary || c.description || ""),
-      category: c.category || "Software Development",
-      hours: c.totalDuration || 0,
-      chapters: c.chapters?.length || 0,
-      banner: c.banner,
-      isPremium: c.isPremium,
-    }));
-
+    const res = await fetch(`${API_URL}/public/projects?size=100`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return { projects: [], recommended: [] };
+    const data = await res.json();
     return {
-      roadmaps: roadmapsData.roadmaps ?? [],
-      courses,
+      projects: (data.projects ?? []) as ProjectItem[],
+      recommended: (data.recommended ?? []) as ProjectItem[],
     };
   } catch {
-    return { roadmaps: [], courses: [] };
+    return { projects: [], recommended: [] };
   }
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function HomePage() {
-  const { roadmaps, courses } = await getInitialData();
+export default async function ProjectsHomePage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { projects, recommended } = await getProjects();
+  const canonical = canonicalFor(readFilters(await searchParams));
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Faceted canonical + og:url (query-string aware; hoisted to <head>) */}
+      <link rel="canonical" href={canonical} />
+      <meta property="og:url" content={canonical} />
+
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <div
         className="relative overflow-hidden text-slate-50"
         style={{ backgroundColor: "#0e2036" }}
       >
-        {/* Grid background */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -160,52 +161,84 @@ export default async function HomePage() {
 
         <Header />
 
-        <section className="relative z-10 container mx-auto px-6 pt-8 pb-24 md:pt-14 lg:pt-20">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <section className="relative z-10 container mx-auto px-6 pt-8 pb-20 md:pt-12 lg:pt-16">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.15] font-bold text-white mb-6">
-                Backend, AI, and <br className="hidden md:block" />
-                <span className="text-[#98D4E3]">Engineering Courses</span>
+              <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.12] font-bold text-white mb-6">
+                Build Real-World <br className="hidden md:block" />
+                <span className="text-[#98D4E3]">Backend Projects</span>
               </h1>
-              <p className="text-lg md:text-xl text-slate-400 mb-10 leading-relaxed max-w-lg">
-                Whether you&apos;re new to Backend, AI, Product, Cybersecurity,
-                Cloud Engineering, or want to scale up — this is your home for
-                your tech engineering career transformation.
+              <p className="text-lg md:text-xl text-slate-400 mb-8 leading-relaxed max-w-lg">
+                Learn advanced tech engineering through real-world projects.
+                From backend, AI to product engineering. We help you scale your
+                engineering skills.
               </p>
               <ul className="space-y-4 text-slate-200">
                 <li className="flex items-center gap-4">
-                  <Clock className="w-5 h-5 text-slate-300" />
-                  <span className="text-lg">Learn on your schedule</span>
+                  <Layers className="w-5 h-5 text-slate-300" />
+                  <span className="text-lg">
+                    Real-world projects across every language
+                  </span>
                 </li>
                 <li className="flex items-center gap-4">
                   <Code className="w-5 h-5 text-slate-300" />
                   <span className="text-lg">
-                    Build real world practical skills
+                    Build and run code in our playground
                   </span>
                 </li>
                 <li className="flex items-center gap-4">
-                  <Layout className="w-5 h-5 text-slate-300" />
+                  <Trophy className="w-5 h-5 text-slate-300" />
                   <span className="text-lg">
-                    Defense-based, easy-to-digest lessons
+                    Turn every build into a portfolio piece
                   </span>
                 </li>
               </ul>
             </div>
-            <div className="relative w-full max-w-[500px] mx-auto lg:ml-auto aspect-square">
-              <HeroIllustration />
-            </div>
+
+            <HeroVideo />
           </div>
         </section>
       </div>
 
-      {/* ── Browse (client — search, filters, pagination) ───────────────────── */}
-      <BrowseSection initialRoadmaps={roadmaps} initialCourses={courses} />
+      {/* ── "Build" approach intro ──────────────────────────────────────────── */}
+      <section className="pt-16 md:pt-20 px-4 bg-[#F8FAFC] text-slate-900">
+        <div className="container mx-auto">
+          <h2 className="text-[2rem] font-extrabold text-[#0B152A] mb-3">
+            Our &ldquo;Build&rdquo; Approach
+          </h2>
+          <p className="text-slate-500 text-base max-w-2xl">
+            Build your tech engineering career with interactive projects for
+            backend, AI, product engineering and more, curated by real-world
+            experts.
+          </p>
+        </div>
+      </section>
 
-      {/* ── Testimonials ───────────────────────────────────────────────────── */}
+      {/* ── Recommended (most popular) ──────────────────────────────────────── */}
+      <RecommendedProjects projects={recommended} />
+
+      {/* ── Divider ─────────────────────────────────────────────────────────── */}
+      {recommended.length > 0 && (
+        <div className="bg-[#F8FAFC] px-4 pt-12">
+          <div className="container mx-auto">
+            <hr className="border-slate-200" />
+          </div>
+        </div>
+      )}
+
+      {/* ── Browse Projects ─────────────────────────────────────────────────── */}
+      <Suspense fallback={null}>
+        <ProjectsBrowse projects={projects} />
+      </Suspense>
+
+      {/* ── Three ways to practice ──────────────────────────────────────────── */}
+      <PracticeSteps />
+
+      {/* ── Get Inspired (testimonials) ─────────────────────────────────────── */}
       <Testimonials />
 
-      {/* ── FAQs ───────────────────────────────────────────────────────────── */}
-      <FAQSection faqs={FAQS} />
+      {/* ── CTA ─────────────────────────────────────────────────────────────── */}
+      <ProjectsCTA />
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
       <Footer />

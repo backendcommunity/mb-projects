@@ -6,11 +6,13 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 interface DescriptionSectionProps {
   fullText: string;
   previewChars?: number;
+  title?: string;
 }
 
 export function DescriptionSection({
   fullText,
   previewChars = 420,
+  title = "Course Description",
 }: DescriptionSectionProps) {
   const [expanded, setExpanded] = useState(false);
   const needsTruncation = fullText.length > previewChars;
@@ -18,9 +20,7 @@ export function DescriptionSection({
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-6">
-        Course Description
-      </h2>
+      <h2 className="text-xl font-bold text-slate-900 mb-6">{title}</h2>
 
       <div className="relative">
         <article
