@@ -59,7 +59,12 @@ export async function generateMetadata({
   searchParams: Promise<SearchParams>;
 }): Promise<Metadata> {
   const f = readFilters(await searchParams);
-  const facets = [...f.levels, ...f.languages, ...f.categories, ...f.technologies];
+  const facets = [
+    ...f.levels,
+    ...f.languages,
+    ...f.categories,
+    ...f.technologies,
+  ];
 
   const titleCore = facets.length
     ? `${facets.join(", ")} Backend Projects`
@@ -115,15 +120,18 @@ async function getProjects(): Promise<{
 }> {
   try {
     const res = await fetch(`${API_URL}/public/projects?size=100`, {
-      next: { revalidate: 3600 },
+      // next: { revalidate: 3600 },
     });
+    console.log("Fetched projects:", res, "recommended:");
     if (!res.ok) return { projects: [], recommended: [] };
     const data = await res.json();
+
     return {
       projects: (data.projects ?? []) as ProjectItem[],
       recommended: (data.recommended ?? []) as ProjectItem[],
     };
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch projects", error);
     return { projects: [], recommended: [] };
   }
 }

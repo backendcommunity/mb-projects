@@ -339,7 +339,7 @@ export function ProjectsBrowse({ projects }: { projects: ProjectItem[] }) {
 
         <div className="flex flex-col lg:flex-row gap-8 lg:items-start">
           {/* Sidebar */}
-          <aside className="w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-6 lg:self-start lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
+          <aside className="w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-6 lg:self-start">
             <button
               onClick={() => setSidebarOpen((p) => !p)}
               className="lg:hidden w-full mb-4 flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700"
