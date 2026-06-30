@@ -23,8 +23,7 @@ import type { ProjectMilestone } from "@/components/project-task-list";
 import { CertificatePreview } from "@/components/certificate-preview";
 import { stripHtml } from "@/lib/utils";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://demo.masteringbackend.com/api/v3";
+import { API_URL } from "@/lib/config";
 const SITE_URL = "https://projects.masteringbackend.com";
 
 // ─── data ─────────────────────────────────────────────────────────────────────
@@ -128,7 +127,6 @@ export default async function ProjectDetailRoute({
 
   if (!project || !project.title) notFound();
 
-  const languages = asArray(project.languages);
   const technologies = asArray(project.technologies);
   const skills = asArray(project.skills);
   const prerequisites = asArray(project.prerequisites);
@@ -170,7 +168,6 @@ export default async function ProjectDetailRoute({
       : []),
     ...(taskCount ? [{ icon: ListChecks, label: `${taskCount} tasks` }] : []),
     ...(totalPoints ? [{ icon: Award, label: `${totalPoints} pts` }] : []),
-    ...(languages[0] ? [{ icon: Code2, label: languages[0] }] : []),
   ];
 
   // JSON-LD structured data (programmatic SEO).
@@ -423,14 +420,6 @@ export default async function ProjectDetailRoute({
                       {level}
                     </dd>
                   </div>
-                  {languages.length > 0 && (
-                    <div className="flex justify-between">
-                      <dt className="text-slate-500">Languages</dt>
-                      <dd className="font-medium text-slate-800 text-right">
-                        {languages.join(", ")}
-                      </dd>
-                    </div>
-                  )}
                   {totalStudents > 0 && (
                     <div className="flex justify-between">
                       <dt className="text-slate-500 flex items-center gap-1">
