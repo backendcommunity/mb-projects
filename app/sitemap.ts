@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
+import { API_URL } from "@/lib/config";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://demo.masteringbackend.com/api/v3";
 const SITE_URL = "https://projects.masteringbackend.com";
 
 export const revalidate = 3600;

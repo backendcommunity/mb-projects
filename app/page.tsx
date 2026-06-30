@@ -13,8 +13,7 @@ import { Footer } from "@/components/Footer";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://demo.masteringbackend.com/api/v3";
+import { API_URL } from "@/lib/config";
 const SITE_URL = "https://projects.masteringbackend.com";
 
 // Render per-request so filter query params drive metadata (canonical/OG/title).

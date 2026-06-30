@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart2, Clock, ListChecks, Code2 } from "lucide-react";
+import { BarChart2, Clock, ListChecks } from "lucide-react";
 import { stripHtml } from "@/lib/utils";
 
 export interface ProjectItem {
@@ -25,7 +25,6 @@ export function ProjectCard({
   project: ProjectItem;
   popular?: boolean;
 }) {
-  const language = project.languages?.[0];
   return (
     <Link href={`/projects/${project.slug}`}>
       <div
@@ -57,12 +56,6 @@ export function ProjectCard({
             <ListChecks className="w-3.5 h-3.5" />
             {project.taskCount || 0} tasks
           </span>
-          {language && (
-            <span className="flex items-center gap-1.5">
-              <Code2 className="w-3.5 h-3.5" />
-              {language}
-            </span>
-          )}
         </div>
       </div>
     </Link>
