@@ -6,7 +6,10 @@ import { HeroVideo } from "@/components/hero-video";
 import { ProjectsBrowse } from "@/components/projects-browse";
 import type { ProjectItem } from "@/components/project-card";
 import { RecommendedProjects } from "@/components/recommended-projects";
-import { CompanyMarquee, type MarqueeCompany } from "@/components/company-marquee";
+import {
+  CompanyMarquee,
+  type MarqueeCompany,
+} from "@/components/company-marquee";
 import { PracticeSteps } from "@/components/practice-steps";
 import { ProjectsCTA } from "@/components/projects-cta";
 import Testimonials from "@/components/testimonials";
@@ -121,9 +124,8 @@ async function getProjects(): Promise<{
 }> {
   try {
     const res = await fetch(`${API_URL}/public/projects?size=100`, {
-      // next: { revalidate: 3600 },
+      next: { revalidate: 3600 },
     });
-    console.log("Fetched projects:", res, "recommended:");
     if (!res.ok) return { projects: [], recommended: [] };
     const data = await res.json();
 
@@ -196,13 +198,13 @@ export default async function ProjectsHomePage({
               </h1>
               <p className="text-lg md:text-xl text-slate-400 mb-8 leading-relaxed max-w-lg">
                 Learn backend engineering through real-world projects. From
-                backend to AI to product engineering, build and run code in
-                our in-browser playground and turn every project into a
-                portfolio piece.
+                backend to AI to product engineering, build and run code in our
+                in-browser playground and turn every project into a portfolio
+                piece.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-10">
                 <Link
-                  href="https://app.masteringbackend.com?ref=projects-hero"
+                  href="https://app.masteringbackend.com/projects?ref=projects-hero"
                   className="px-8 py-3 rounded-full bg-[#13AECE] text-white font-semibold text-center hover:bg-[#0f8b9e] transition-colors"
                 >
                   Start Building
@@ -218,7 +220,13 @@ export default async function ProjectsHomePage({
                 Join thousands of MasteringBackend learners working at
               </p>
               <div className="flex items-center gap-6 flex-wrap opacity-50">
-                {["Kuda", "SentinelOne", "Paystack", "Salesforce", "Flutterwave"].map((label, i) => (
+                {[
+                  "Kuda",
+                  "SentinelOne",
+                  "Paystack",
+                  "Salesforce",
+                  "Flutterwave",
+                ].map((label, i) => (
                   <span
                     key={i}
                     className="text-lg font-bold tracking-tight text-slate-300"
@@ -234,7 +242,11 @@ export default async function ProjectsHomePage({
                 className="absolute -inset-8 rounded-[2rem] bg-[#13AECE] opacity-[0.18] blur-3xl pointer-events-none"
                 aria-hidden="true"
               />
-              <HeroVideo size="lg" browserChrome chromeUrl="projects.masteringbackend.com" />
+              <HeroVideo
+                size="lg"
+                browserChrome
+                chromeUrl="projects.masteringbackend.com"
+              />
             </div>
           </div>
         </section>

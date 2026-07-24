@@ -22,16 +22,16 @@ export function ProjectsCTA() {
             </h2>
             <p className="text-white/80 text-base md:text-lg mb-10">
               Pick a project, open the playground, and build something real.
-              No fluff, no toy examples.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
-                href="https://app.masteringbackend.com?ref=projects-cta"
+                href="https://app.masteringbackend.com/projects?ref=projects-cta"
                 className="w-full sm:w-auto px-8 py-3 rounded-full bg-white text-[#2563EB] font-semibold hover:bg-slate-100 transition-colors"
               >
                 Get started
               </Link>
               <Link
+                target="_blank"
                 href="https://www.youtube.com/watch?v=I_fveQqYDxY"
                 className="w-full sm:w-auto px-8 py-3 rounded-full border border-white/40 text-white font-semibold hover:bg-white/10 transition-colors"
               >

@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { FolderGit2, ArrowRight } from "lucide-react";
 import type { ProjectItem } from "@/components/project-card";
+import { stripHtml } from "@/lib/utils";
 
-export function RecommendedProjects({
-  projects,
-}: {
-  projects: ProjectItem[];
-}) {
+export function RecommendedProjects({ projects }: { projects: ProjectItem[] }) {
   if (!projects?.length) return null;
 
   return (
@@ -17,8 +14,8 @@ export function RecommendedProjects({
             Our &ldquo;Build&rdquo; Approach
           </h2>
           <p className="text-sm text-slate-500 max-w-2xl mx-auto">
-            Build your engineering skills with interactive projects for
-            backend, AI, and product engineering.
+            Build your engineering skills with interactive projects for backend,
+            AI, and tech engineering.
           </p>
         </div>
 
@@ -41,7 +38,7 @@ export function RecommendedProjects({
                       <FolderGit2 className="w-5 h-5 text-[#13AECE]" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-[#0B152A] line-clamp-1">
+                      <h3 className="text-base font-bold text-[#0B152A]">
                         {project.title}
                       </h3>
                       <p className="text-sm text-slate-500">{project.level}</p>
@@ -53,7 +50,10 @@ export function RecommendedProjects({
                     {badge.label}
                   </span>
                 </div>
-
+                <p className="text-sm text-slate-500 leading-relaxed line-clamp-3 flex-1 mb-5">
+                  {stripHtml(project.summary) ||
+                    "Build this project step by step."}
+                </p>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-5 border-t border-slate-100 mt-auto">
                   <span className="text-sm font-medium text-slate-500">
                     {project.duration || 0}{" "}
