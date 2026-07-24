@@ -334,7 +334,7 @@ function PromoCard({
             className="w-full bg-[#1EAEDB] hover:bg-[#1a9bc4] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl mb-3 transition-colors shadow-lg shadow-[#1EAEDB]/20 text-[15px] flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            {loading ? "Processing..." : "Claim This Offer"}
+            {loading ? "Processing..." : "Register Now →"}
           </button>
 
           <p className="text-[11px] text-center italic text-slate-500">

@@ -17,11 +17,12 @@ export function ProjectsCTA() {
           />
           <div className="relative z-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-[2.75rem] font-bold text-white leading-tight mb-4">
-              Ready To Scale Your
-              <br className="hidden md:block" /> Engineering Career?
+              Stop Reading About
+              <br className="hidden md:block" /> Backend Engineering.
             </h2>
             <p className="text-white/80 text-base md:text-lg mb-10">
-              Get real-world experience with MB Projects.
+              Pick a project, open the playground, and build something real.
+              No fluff, no toy examples.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

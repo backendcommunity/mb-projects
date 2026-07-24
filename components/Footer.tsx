@@ -14,9 +14,9 @@ export function Footer() {
               />
             </div>
             <p className="text-slate-500 leading-relaxed mb-12 text-[15px]">
-              Transform your backend development career with our proven Learn →
-              Build → Grow methodology. Join thousands of developers who have
-              successfully landed their dream jobs.
+              Learn → Build → Grow: structured courses, real backend projects,
+              and mock interviews, all in one place to help you get better
+              at backend engineering.
             </p>
             <div className="space-y-3 mt-auto">
               <div className="flex gap-3">
