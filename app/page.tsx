@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Layers, Code, Trophy } from "lucide-react";
+import Link from "next/link";
 import { Header } from "@/components/header";
 import { HeroVideo } from "@/components/hero-video";
 import { ProjectsBrowse } from "@/components/projects-browse";
 import type { ProjectItem } from "@/components/project-card";
 import { RecommendedProjects } from "@/components/recommended-projects";
+import { CompanyMarquee, type MarqueeCompany } from "@/components/company-marquee";
 import { PracticeSteps } from "@/components/practice-steps";
 import { ProjectsCTA } from "@/components/projects-cta";
 import Testimonials from "@/components/testimonials";
@@ -74,7 +75,7 @@ export async function generateMetadata({
 
   const description = facets.length
     ? `Browse ${facets.join(", ")} backend projects on MasteringBackend. Build real-world systems in our in-browser playground and grow your engineering portfolio.`
-    : "Practice backend engineering by building real-world projects. From Go to Rust, Docker to system design — build with our in-browser playground and grow your engineering portfolio.";
+    : "Practice backend engineering by building real-world projects. From Go to Rust, Docker to system design, build with our in-browser playground and grow your engineering skills.";
 
   // NOTE: canonical + og:url are rendered manually in the page component
   // (React hoists them to <head>) because Next strips query strings from
@@ -136,6 +137,24 @@ async function getProjects(): Promise<{
   }
 }
 
+function technologiesFor(projects: ProjectItem[]): MarqueeCompany[] {
+  // `technologies` already covers language names in clean casing (Go, Ruby,
+  // Rust, ...); `languages` is a raw ALL-CAPS enum field, so only pull from
+  // `technologies` here to avoid case-duplicate entries (e.g. "Ruby" + "RUBY").
+  const seen = new Map<string, string>();
+  for (const p of projects) {
+    for (const raw of p.technologies ?? []) {
+      const name = raw.trim();
+      if (!name) continue;
+      const key = name.toLowerCase();
+      if (!seen.has(key)) seen.set(key, name);
+    }
+  }
+  return Array.from(seen.values())
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => ({ name }));
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ProjectsHomePage({
@@ -155,7 +174,7 @@ export default async function ProjectsHomePage({
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <div
         className="relative overflow-hidden text-slate-50"
-        style={{ backgroundColor: "#0e2036" }}
+        style={{ backgroundColor: "#0B152A" }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
@@ -168,70 +187,67 @@ export default async function ProjectsHomePage({
 
         <Header />
 
-        <section className="relative z-10 container mx-auto px-6 pt-8 pb-20 md:pt-12 lg:pt-16">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
+        <section className="relative z-10 container mx-auto flex flex-col justify-center items-stretch min-h-[640px] lg:min-h-[720px] px-6 pt-8 pb-20 md:pt-12 lg:pt-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-10 items-center">
             <div className="max-w-2xl">
               <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.12] font-bold text-white mb-6">
                 Build Real-World <br className="hidden md:block" />
                 <span className="text-[#98D4E3]">Backend Projects</span>
               </h1>
               <p className="text-lg md:text-xl text-slate-400 mb-8 leading-relaxed max-w-lg">
-                Learn advanced tech engineering through real-world projects.
-                From backend, AI to product engineering. We help you scale your
-                engineering skills.
+                Learn backend engineering through real-world projects. From
+                backend to AI to product engineering, build and run code in
+                our in-browser playground and turn every project into a
+                portfolio piece.
               </p>
-              <ul className="space-y-4 text-slate-200">
-                <li className="flex items-center gap-4">
-                  <Layers className="w-5 h-5 text-slate-300" />
-                  <span className="text-lg">
-                    Real-world projects across every language
+              <div className="flex flex-col sm:flex-row gap-4 mb-10">
+                <Link
+                  href="https://app.masteringbackend.com?ref=projects-hero"
+                  className="px-8 py-3 rounded-full bg-[#13AECE] text-white font-semibold text-center hover:bg-[#0f8b9e] transition-colors"
+                >
+                  Start Building
+                </Link>
+                <a
+                  href="#how-it-works"
+                  className="px-8 py-3 rounded-full border border-white/20 text-white font-semibold text-center hover:bg-white/10 transition-colors"
+                >
+                  See How It Works
+                </a>
+              </div>
+              <p className="text-sm text-slate-400 mb-4">
+                Join thousands of MasteringBackend learners working at
+              </p>
+              <div className="flex items-center gap-6 flex-wrap opacity-50">
+                {["Kuda", "SentinelOne", "Paystack", "Salesforce", "Flutterwave"].map((label, i) => (
+                  <span
+                    key={i}
+                    className="text-lg font-bold tracking-tight text-slate-300"
+                  >
+                    {label}
                   </span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <Code className="w-5 h-5 text-slate-300" />
-                  <span className="text-lg">
-                    Build and run code in our playground
-                  </span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <Trophy className="w-5 h-5 text-slate-300" />
-                  <span className="text-lg">
-                    Turn every build into a portfolio piece
-                  </span>
-                </li>
-              </ul>
+                ))}
+              </div>
             </div>
 
-            <HeroVideo />
+            <div className="relative">
+              <div
+                className="absolute -inset-8 rounded-[2rem] bg-[#13AECE] opacity-[0.18] blur-3xl pointer-events-none"
+                aria-hidden="true"
+              />
+              <HeroVideo size="lg" browserChrome chromeUrl="projects.masteringbackend.com" />
+            </div>
           </div>
         </section>
       </div>
 
-      {/* ── "Build" approach intro ──────────────────────────────────────────── */}
-      <section className="pt-16 md:pt-20 px-4 bg-[#F8FAFC] text-slate-900">
-        <div className="container mx-auto">
-          <h2 className="text-[2rem] font-extrabold text-[#0B152A] mb-3">
-            Our &ldquo;Build&rdquo; Approach
-          </h2>
-          <p className="text-slate-500 text-base max-w-2xl">
-            Build your tech engineering career with interactive projects for
-            backend, AI, product engineering and more, curated by real-world
-            experts.
-          </p>
-        </div>
-      </section>
-
-      {/* ── Recommended (most popular) ──────────────────────────────────────── */}
+      {/* ── Recommended ("Our Build Approach" intro + demo-card grid) ───────── */}
       <RecommendedProjects projects={recommended} />
 
-      {/* ── Divider ─────────────────────────────────────────────────────────── */}
-      {recommended.length > 0 && (
-        <div className="bg-[#F8FAFC] px-4 pt-12">
-          <div className="container mx-auto">
-            <hr className="border-slate-200" />
-          </div>
-        </div>
-      )}
+      {/* ── Practice projects across (trust marquee, real language/tech facets) */}
+      <CompanyMarquee
+        label="Practice projects across"
+        companies={technologiesFor(projects)}
+      />
 
       {/* ── Browse Projects ─────────────────────────────────────────────────── */}
       <Suspense fallback={null}>

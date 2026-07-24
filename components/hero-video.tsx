@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { Play } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface HeroVideoProps {
   videoId?: string;
   title?: string;
+  /** Play-button size. "md" (default) keeps the original card size; "lg" is bigger, for heroes where the video is the visual centerpiece. */
+  size?: "md" | "lg";
+  /** Wrap the video in a browser-window chrome (dot bar + url strip). Adds visual height/weight without cropping the video itself. Default false keeps the plain card unchanged. */
+  browserChrome?: boolean;
+  /** Url text shown in the chrome bar when browserChrome is true. */
+  chromeUrl?: string;
 }
 
 /**
@@ -16,12 +23,37 @@ interface HeroVideoProps {
 export function HeroVideo({
   videoId = "I_fveQqYDxY",
   title = "MasteringBackend Projects demo",
+  size = "md",
+  browserChrome = false,
+  chromeUrl = "projects.masteringbackend.com",
 }: HeroVideoProps) {
   const [playing, setPlaying] = useState(false);
 
+  const buttonSize =
+    size === "lg" ? "w-20 h-20 md:w-28 md:h-28" : "w-16 h-16 md:w-20 md:h-20";
+  const iconSize =
+    size === "lg" ? "w-9 h-9 md:w-11 md:h-11" : "w-7 h-7 md:w-8 md:h-8";
+
   return (
-    <div className="relative w-full max-w-[560px] mx-auto">
-      <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0B1120] shadow-2xl">
+    <div className="relative w-full max-w-[760px] mx-auto">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0B152A] shadow-2xl">
+        {browserChrome && (
+          <div className="flex items-center gap-4 border-b border-white/10 bg-[#0B152A] px-4 h-10">
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+              <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+              <span className="w-2.5 h-2.5 rounded-full bg-white/15" />
+            </div>
+            <div className="flex-1 min-w-0 flex items-center justify-center">
+              <span className="text-[11px] text-slate-500 font-mono truncate">
+                {chromeUrl}
+              </span>
+            </div>
+            <div className="w-[52px] shrink-0" aria-hidden="true" />
+          </div>
+        )}
+
+        <div className="relative w-full aspect-video">
         {playing ? (
           <iframe
             className="absolute inset-0 w-full h-full"
@@ -45,12 +77,18 @@ export function HeroVideo({
             />
             <span className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 transition-colors group-hover:from-black/40" />
             <span className="absolute inset-0 flex items-center justify-center">
-              <span className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#13AECE] text-white shadow-lg transition-transform group-hover:scale-110">
-                <Play className="w-7 h-7 md:w-8 md:h-8 ml-1 fill-white" />
+              <span
+                className={cn(
+                  "flex items-center justify-center rounded-full bg-[#13AECE] text-white shadow-lg transition-transform group-hover:scale-110",
+                  buttonSize,
+                )}
+              >
+                <Play className={cn("ml-1 fill-white", iconSize)} />
               </span>
             </span>
           </button>
         )}
+        </div>
       </div>
     </div>
   );

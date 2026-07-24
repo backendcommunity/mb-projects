@@ -1,9 +1,20 @@
 import type React from "react";
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 // import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/error-boundary";
+
+const satoshi = localFont({
+  src: [
+    { path: "./fonts/Satoshi-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Satoshi-500.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/Satoshi-700.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Satoshi-900.woff2", weight: "900", style: "normal" },
+  ],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://masteringbackend.com"),
@@ -72,6 +83,11 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtag/js?id=G-7HSJ01FVPX"
         ></script>
         <script
+          async
+          src="https://affiliates.masteringbackend.com/affizy.js"
+          data-affizy="pk_c3c9a43d1b230374ffda2b7a"
+        ></script>
+        <script
           dangerouslySetInnerHTML={{
             __html: `
 
@@ -85,7 +101,7 @@ window.dataLayer = window.dataLayer || [];
           }}
         ></script>
       </head>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+      <body className={`${satoshi.className} antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
