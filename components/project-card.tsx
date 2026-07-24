@@ -29,13 +29,15 @@ export function ProjectCard({
     <Link href={`/projects/${project.slug}`}>
       <div
         className={`bg-white h-full rounded-xl border p-6 flex flex-col transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer group ${
-          popular ? "border-[#13AECE]/40 ring-1 ring-[#13AECE]/10" : "border-slate-200"
+          popular
+            ? "border-[#13AECE]/40 ring-1 ring-[#13AECE]/10"
+            : "border-slate-200"
         }`}
       >
         <h3 className="text-lg font-bold text-[#0B152A] mb-2 leading-snug group-hover:text-[#13AECE] transition-colors line-clamp-2">
           {project.title}
         </h3>
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 mb-3">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 mb-3 capitalize">
           <BarChart2 className="w-3.5 h-3.5 text-[#13AECE]" />
           {project.level}
           {project.isWaiting && (
