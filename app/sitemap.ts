@@ -1,74 +1,52 @@
 import type { MetadataRoute } from "next";
-import { API_URL } from "@/lib/config";
+import { fetchProjects } from "@/lib/projects";
+import { TAXONOMY, CATEGORIES, filterByTerm } from "@/lib/taxonomy";
 
 const SITE_URL = "https://projects.masteringbackend.com";
 
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  type P = {
-    slug: string;
-    languages?: string[];
-    industries?: string[];
-    technologies?: string[];
-  };
-  let projects: P[] = [];
-  try {
-    const res = await fetch(`${API_URL}/public/projects?size=500`, {
-      next: { revalidate: 3600 },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      projects = (data.projects ?? []) as P[];
-    }
-  } catch {
-    // fall through with empty list
-  }
-
+  const projects = await fetchProjects();
   const now = new Date();
 
+  // ── Project detail pages ────────────────────────────────────────────────────
   const projectEntries: MetadataRoute.Sitemap = projects
     .filter((p) => p.slug)
     .map((p) => ({
       url: `${SITE_URL}/projects/${p.slug}`,
       lastModified: now,
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 0.8,
     }));
 
-  // Some rows store an array as a JSON-encoded string (e.g. '["Go"]'); flatten.
-  const norm = (arr?: string[]): string[] =>
-    (arr || []).flatMap((v) => {
-      if (typeof v === "string" && v.trim().startsWith("[")) {
-        try {
-          const parsed = JSON.parse(v);
-          return Array.isArray(parsed) ? parsed.map(String) : [v];
-        } catch {
-          return [v];
-        }
-      }
-      return [v];
-    });
+  // ── Taxonomy landing pages ──────────────────────────────────────────────────
+  //
+  // CHANGED 8 Aug 2026. This previously emitted query-string facets:
+  //     /?language=Go   /?category=FinTech   /?technology=Redis
+  // Google generally consolidates query-param URLs into the canonical, so those
+  // were unlikely to be indexed as separate pages. The path-based equivalents are
+  // proven — /projects/tags/java-backend-projects converts at 7.0% CTR, the best
+  // on the whole masteringbackend.com domain.
+  //
+  // Only emit terms that actually have projects, so we never submit a thin page.
+  const taxonomyEntries: MetadataRoute.Sitemap = TAXONOMY.filter(
+    (t) => filterByTerm(projects, t).length > 0,
+  ).map((t) => ({
+    url: `${SITE_URL}/projects/tags/${t.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
 
-  // Single-facet filter landing pages (programmatic SEO).
-  const collect = (pick: (p: P) => string[] | undefined) => {
-    const set = new Set<string>();
-    for (const p of projects) for (const v of norm(pick(p))) if (v) set.add(v);
-    return Array.from(set);
-  };
-  const facet = (key: string, values: string[]): MetadataRoute.Sitemap =>
-    values.map((v) => ({
-      url: `${SITE_URL}/?${key}=${encodeURIComponent(v)}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.6,
-    }));
-
-  const filterEntries: MetadataRoute.Sitemap = [
-    ...facet("language", collect((p) => p.languages)),
-    ...facet("category", collect((p) => p.industries)),
-    ...facet("technology", collect((p) => p.technologies)),
-  ];
+  const categoryEntries: MetadataRoute.Sitemap = CATEGORIES.filter(
+    (t) => filterByTerm(projects, t).length > 0,
+  ).map((t) => ({
+    url: `${SITE_URL}/projects/category/${t.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }));
 
   return [
     {
@@ -77,7 +55,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 1,
     },
-    ...filterEntries,
+    ...taxonomyEntries,
+    ...categoryEntries,
     ...projectEntries,
   ];
 }
